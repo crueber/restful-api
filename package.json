@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "Build RESTful APIs via Convention.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": { "test": "" },
   "repository": {
     "type": "git",
     "url": "git@github.com:crueber/restful-api.git"
@@ -18,8 +16,7 @@
     "express",
     "web",
     "convention-over-configuration",
-    "convention",
-    ""
+    "convention"
   ],
   "author": "Christopher WJ Rueber",
   "license": "MIT",
