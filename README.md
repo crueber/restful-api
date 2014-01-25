@@ -14,6 +14,18 @@ Here are a quick battery of RESTful APIs for a Blog's Post Resource:
 
 It should become fairly obvious why there are so many advantages of this style; Idempotency for one. If you are always operating on a specific, unique identifier (1 in the example above), that means that you're only ever going to effect the identifier '1'! So if you triple and quadruple click the button to delete post 1, you're still only ever going to delete post '1'!
 
+One of the few downfalls of REST is the lack of bulk APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
+
+    POST /posts?method=delete
+         Body: [1, 2, 3, 4, 5, 10, 42, 68, 99]
+
+The result? Returns an array of response objects, just as if you had made all 9 calls individually! Need to make an update call for a whole bunch of posts at a time? Easy peasy:
+
+    POST /posts?method=update
+         Body: { 1: { title: 'My new title!' }, 2: { author: 'Christopher Rueber' } }
+
+Update in this library means Patch. This is due to the authors belief that you generally don't want to completely smash a whole object if you don't include every attribute. The least bandwidth possible should be consumed.
+
 #### Limitations
 
 * Express. Most apps in Node utilize Express, and this library is no different. I have some vague notion of expanding this libraries usefulness beyond Express, but for now, that's where it lives.
