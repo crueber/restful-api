@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Build RESTful APIs via Convention.",
   "main": "index.js",
-  "scripts": { "test": "" },
+  "scripts": {
+    "test": ""
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:crueber/restful-api.git"
@@ -22,5 +24,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/crueber/restful-api/issues"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "async": "~0.2.10"
   }
 }
