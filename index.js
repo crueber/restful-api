@@ -11,15 +11,14 @@ module.exports = function (express_app, overriden_defaults) {
     'delete': 'delete',
     before_filters: 'before_filters',
     after_filters: 'after_filters',
-    resource: 'resource'
+    finder: 'finder'
   }, overriden_defaults)
 
-  // k,v pairs of controllers. { 'posts': PostsController, 'comments', CommentsController }
+  // <name, controller> pairs of controllers. Eg. { 'posts': PostsController, 'comments', CommentsController }
   var controllers = {}
 
-  // options = { controller: 'comments', controller_path ['posts', 'comments'] }
-  // and any other defaults overrides.
-  // verb == index, create, read, update, delete, bulk
+  // options = { controller: 'comments', controller_path ['posts', 'comments'] } // and any other defaults overrides.
+  // verb can be: index, create, read, update, delete, bulk
   var restful = function(verb, req, res, options) {
     var controller_name = options[controller]
     var action = options[verb] || defaults[verb]
@@ -35,7 +34,7 @@ module.exports = function (express_app, overriden_defaults) {
     })
   }
 
-  // must be called with all controllers before resources can be added.
+  // Must be called with all controllers to be used by the restful-api.resource.
   this.register_controller = function (name, object) { 
     if (typeof name === 'object') {
       controllers = _.merge(controllers, name)
@@ -44,8 +43,8 @@ module.exports = function (express_app, overriden_defaults) {
     }
   }
 
-  // accepts n number of params, with the last being an object in the form of: { controller: PostsController }
-  this.resources = function() {
+  // Function signature intentionally left blank. Need to iterate over all arguments.
+  this.resource = function () {
     var base_path = ''
     var last_arg = arguments[arguments.length - 1]
     var options = typeof last_arg === 'object' ? arguments[arguments.length - 1] : { controller: last_arg }
