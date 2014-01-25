@@ -1,3 +1,7 @@
+# **ß** ALERT ** ALERT ** ALERT ****
+
+THIS LIBRARY IS UNDER INITIAL CONSTRUCTION! IT DOES NOT CURRENTLY WORK AND IS NOT CURRENTLY IN NPM! STAY TUNED!
+
 # RESTful API
 
 ## What is this thing?
@@ -52,7 +56,7 @@ Pull in the library and save it.
 
 First you have to require the restful-api, at some point after your express initialization.
 
-    rest = require('rest')(app)
+    rest = require('restful-api')(app)
 
 ### Step 3: Register your controllers
 
