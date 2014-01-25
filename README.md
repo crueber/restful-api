@@ -2,7 +2,17 @@
 
 ## What is this thing?
 
-REST. It's not just a bunch of letters and a vague way to get things done. It stands for REpresentational State Transfer. Over HTTP, that means specific verbs match to specific nouns. Luckily, we have an easy time of this over HTTP, because we already have HTTP verbs, and a URI in which we can easily define our nouns. Additionally, the results of these resources should be representable in multiple different formats (JSON and XML at a minimum). 
+REST. It's not just a bunch of letters and a vague way to get things done. It stands for REpresentational State Transfer. Luckily, over HTTP, we have an easy place for both the verbs and nouns of REST! Each request issued to a server already contains both things, all you have to do is start structuring it in a conventional pattern. Additionally, the results of these resources should be representable in multiple different formats (JSON and XML at a minimum). 
+
+Here are a quick battery of RESTful APIs for a Blog's Post Resource:
+
+       GET /posts    // Returns a list of all posts available!
+      POST /posts    // Creates a new post!
+       GET /posts/1  // Returns a single post!
+       PUT /posts/1  // Updates a post that exists!
+    DELETE /posts/1  // Deletes a post that exists!
+
+It should become fairly obvious why there are so many advantages of this style; Idempotency for one. If you are always operating on a specific, unique identifier (1 in the example above), that means that you're only ever going to effect the identifier '1'! So if you triple and quadruple click the button to delete post 1, you're still only ever going to delete post '1'!
 
 #### Limitations
 
@@ -67,6 +77,7 @@ First you have to require the restful-api, at some point after your express init
 // # (D)elete: DELETE /posts, POST /posts/:id/delete
 // # Bulk: POST /posts/bulk?method=delete body: [id, id, id]
 // # Bulk: POST /posts/bulk?method=update body: {id: {}, id: {}}
+
 // # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
 // # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
 // # GET /posts/1/comments[.json] => {comments: [{}, {}]}
