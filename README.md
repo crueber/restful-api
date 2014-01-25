@@ -18,7 +18,7 @@ Here are a quick battery of RESTful APIs for a Blog's Post Resource:
 
 It should become fairly obvious why there are so many advantages of this style; Idempotency for one. If you are always operating on a specific, unique identifier (1 in the example above), that means that you're only ever going to effect the identifier '1'! So if you triple and quadruple click the button to delete post 1, you're still only ever going to delete post '1'!
 
-One of the few downfalls of REST is the lack of bulk APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
+One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
 
     POST /posts?method=delete
          Body: [1, 2, 3, 4, 5, 10, 42, 68, 99]
@@ -89,10 +89,10 @@ First you have to require the restful-api, at some point after your express init
 // # Index: GET /posts, 
 // # (C)reate: POST /posts, 
 // # (R)ead: GET /posts/:id
-// # (U)pdate: PUT /posts/:id, POST /posts/:id/update
-// # (D)elete: DELETE /posts, POST /posts/:id/delete
-// # Bulk: POST /posts/bulk?method=delete body: [id, id, id]
-// # Bulk: POST /posts/bulk?method=update body: {id: {}, id: {}}
+// # (U)pdate: PUT /posts/:id -- at some point, maybe: POST /posts/:id/update
+// # (D)elete: DELETE /posts -- at some point, maybe: POST /posts/:id/delete
+// # Bulk: POST /posts/batch?method=delete body: [id, id, id]
+// # Bulk: POST /posts/batch?method=update body: {id: {}, id: {}}
 
 // # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
 // # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
