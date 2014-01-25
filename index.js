@@ -8,7 +8,7 @@ module.exports = function (express_app, overriden_defaults) {
     create: 'create',
     read: 'read',
     update: 'update',
-    'delete': 'del',
+    'delete': 'delete',
     before_filters: 'before_filters',
     after_filters: 'after_filters',
     resource: 'resource'
@@ -29,6 +29,7 @@ module.exports = function (express_app, overriden_defaults) {
     var represent = function (err, data) {
       async.each(resource.after_filters || [], filter, function finalize(err) {})
     }
+
     async.each(resource.before_filters || [], filter, function (err) {
       resource[action](req, res, represent)
     })
@@ -93,45 +94,4 @@ module.exports = function (express_app, overriden_defaults) {
     }
   }
 }
-
-// *************
-
-// # restful-api
-
-rest = require('rest')(app, { format: 'json' })
-
-// # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
-// # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
-// # GET /posts/1/comments[.json] => {comments: [{}, {}]}
-// # GET /posts/1/comments?parents=true => {posts: [{}], comments: [{}, {}]}
-
-// rest.register_controller('posts', PostsController)
-// rest.register_controller('comments', CommentsController)
-// rest.resource('posts')
-// rest.resource('posts', 'comments')
-
-// # Index: GET /posts, 
-// # (C)reate: POST /posts, 
-// # (R)ead: GET /posts/:id
-// # (U)pdate: PUT /posts/:id, POST /posts/:id/update
-// # (D)elete: DELETE /posts, POST /posts/:id/delete
-// # Bulk: POST /posts/bulk?method=delete body: [id, id, id]
-// # Bulk: POST /posts/bulk?method=update body: {id: {}, id: {}}
-
-// before_filter = (req, res, next) -> callback(null)
-// after_filter = (req, res) -> return
-// # Each entry is listed in respective order that it would be run.
-// PostController = 
-//   resource: (params, plural, model) -> model(null, PostModel)
-//   secure: (req, res, is_secure) -> is_secure(null, true)
-//   before_filters: [ before_filter, before_filter ]
-//   index: (req, res, data) -> data(null, {})
-//   read: (req, res, data) -> data(null, {})
-//   create: (req, res, data) -> data(null, {})
-//   update: (req, res, data) -> data(null, {})
-//   remove: (req, res, data) -> data(null, {})
-//   after_filters: [ after_filter ]
-
-// CommentController =
-//   index: (req, res, data) -> # req = {post: PostModel, comment: [CommentModel, CommentModel]}
 
