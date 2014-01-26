@@ -39,9 +39,9 @@ Update in this library means Patch. This is due to the authors belief that you g
 
 I saw an awful lot of people taking a shot at this particular problem with different node modules, but not a single one was easy to use or understand. Not only that, but some of them actually got REST wrong! I wanted an easier way to..
 
-1. Write (and read) routing for my Node applications.
-2. Simplify writing APIs for Node.
-3. Usable before and after filters defined for my resources.
+1. Simplify writing APIs for Node.
+2. Apply RESTful defaults. I shouldn't have to manage when 403's and 405's happen.
+3. Usable security, filters, and finders should all be baked in.
 4. Easily allow for multiple representations of my resources.
 
 ## Getting Started
@@ -61,7 +61,9 @@ First you have to require the restful-api, at some point after your express init
 ### Step 3: Register your controllers
 
     rest.register_controller('posts', PostsController)
-      - or -
+
+or...
+
     rest.register_controller({ 'posts': PostsController, 'comments': CommentsController })
 
 ### Step 4: Register your resources individually (they can be nested!).
@@ -86,18 +88,18 @@ First you have to require the restful-api, at some point after your express init
 
 # Miscellany information that is useful during the initial building phase...
 
-// # Index: GET /posts, 
-// # (C)reate: POST /posts, 
-// # (R)ead: GET /posts/:id
-// # (U)pdate: PUT /posts/:id -- at some point, maybe: POST /posts/:id/update
-// # (D)elete: DELETE /posts -- at some point, maybe: POST /posts/:id/delete
-// # Bulk: POST /posts/batch?method=delete body: [id, id, id]
-// # Bulk: POST /posts/batch?method=update body: {id: {}, id: {}}
+    // # Index: GET /posts, 
+    // # (C)reate: POST /posts, 
+    // # (R)ead: GET /posts/:id
+    // # (U)pdate: PUT /posts/:id -- at some point, maybe: POST /posts/:id/update
+    // # (D)elete: DELETE /posts -- at some point, maybe: POST /posts/:id/delete
+    // # Bulk: POST /posts/batch?method=delete body: [id, id, id]
+    // # Bulk: POST /posts/batch?method=update body: {id: {}, id: {}}
 
-// # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
-// # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
-// # GET /posts/1/comments[.json] => {comments: [{}, {}]}
-// # GET /posts/1/comments?parents=true => {posts: [{}], comments: [{}, {}]}
+    // # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
+    // # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
+    // # GET /posts/1/comments[.json] => {comments: [{}, {}]}
+    // # GET /posts/1/comments?parents=true => {posts: [{}], comments: [{}, {}]}
 
-// CommentController =
-//   index: (req, res, data) -> # req = {post: PostModel, comment: [CommentModel, CommentModel]}
+    // CommentController =
+    //   index: (req, res, data) -> # req = {post: PostModel, comment: [CommentModel, CommentModel]}

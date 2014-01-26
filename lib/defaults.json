@@ -7,5 +7,6 @@
   'delete          : 'delete',
   'before_filters' : 'before_filters',
   'after_filters'  : 'after_filters',
+  'secure'         : 'secure',
   'finder'         : 'finder'
 }
