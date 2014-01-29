@@ -20,7 +20,7 @@ Here are a quick battery of RESTful APIs for a Blog's Post Resource:
        PUT /posts/1  // Updates a post that exists!
     DELETE /posts/1  // Deletes a post that exists!
 
-It should become fairly obvious why there are so many advantages of this style; Convention over configuration. Guessibility. Idempotency. Best of all, it's becoming the primary standard on the web. No assumptions are made (in this framework) about your applications authorization style. Though security is taken in to account for each and every resource. It is recommended that you follow REST guidelines and make it possible for each individual request to require authorization, rather than relying on sessions.
+It should become fairly obvious why there are so many advantages of this style; Convention over configuration. Guessibility. Idempotency. Best of all, it's becoming the primary standard on the web. No assumptions are made (in this framework) about your applications authorization style. Though security is taken in to account for each and every resource (even for nested resources, it's applied all the way down the line). It is recommended that you follow REST guidelines and make it possible for each individual request to require authorization, rather than relying purely on sessions.
 
 One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
 
@@ -79,7 +79,7 @@ For more info on defaults, take a look at `restful-api/lib/defaults.js`
 
 ### Step 3: Register your controllers
 
-This part will become more obvious what you're doing when you look at Step 5 and see what a controller is all about.
+This isn't obvious when you first look at it, but will become more understandable when you get to Step 5 (where "Controller" is explained).
 
     rest.register_controller('posts', PostsController)
 
@@ -100,14 +100,15 @@ The last parameter may be used for overriding defaults, just the same way as men
 
 ### Step 5: Start building your controllers in this fashion!
 
-These are the properties and callbacks that a controller may have on it. All callbacks follow the node convention of callback(err, args...).
+These are the properties and callbacks that a controller may have on it. All callbacks are the last arg of the function signature, 
+and they all follow the node convention of callback(err, args...).
 
     PostsController = {
       finder: function (identifier, is_index, callback) {},     // identifier is a string that was passed in the URI.
                                                                 // is_index is a boolean for if this was called from an index or not
                                                                 // callback takes err and the model. the model will be set on req[controller_name] for subsequent requests.
       secure: function (req, is_nested, is_secure_callback) {}, // is_nested indicates whether this controllers action will be called. 
-                                                                // is_secure_callback tkaes err and a boolean to indicate if the request is authorized.
+                                                                // is_secure_callback takes err and a boolean to indicate if the request is authorized.
       before_filters: [ function (req, res, callback) ],        // filters that are run before the resource function. Callback takes err.
       after_filters: [ function (req, res, callback) ],         // filters that are run after the resource function, and after the response has been sent. Callback takes err.
       
@@ -119,9 +120,13 @@ These are the properties and callbacks that a controller may have on it. All cal
       remove: function (req, res, success) {}, // success is a callback that takes error. If there isn't one, it returns 200 to indicate success.
     }
 
-Note that if you omit any of these, it doesn't matter! They're simply not applied to that particular resource. Missing a finder? No biggy, no finding will be done. No security necessary? Omit the secure property. Don't need an index? Don't use it! That simple.
+Note that if you omit any of these, it doesn't matter! They're simply not applied to that particular resource. Missing a finder? No biggy. No security necessary? Omit the secure property. Don't need an index? Don't use it! That simple. Oh, and if you omit an action, a proper 405 will be returned by default.
 
-When you use the batch API, you are running the final resources finder, secure, filters, and action, multiple times, with different identifiers for finder each time.
+#### Notes
+
+**Nested Controllers**: When you nest your controllers (say, posts/comments), only the action of the final controller is called. But the finder and secure filters are run on every single controller, from left to right. That means that if you lock down a posts controller, it'll apply all the way down the line. Make sure you make use of the is_nested boolean so that you don't unnecessarily lock down controllers that are further down the execution path!
+
+**Batch API**: When you use the batch API, you are running the final resources finder, secure, filters, and action, multiple times, with different identifiers for finder each time. So you don't have to change anything in order to deal with those batches.
 
 ### Step 6: ...
 
