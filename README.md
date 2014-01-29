@@ -74,8 +74,8 @@ or...
 ### Step 5: Start building your controllers in this fashion!
 
     module.exports = {
-      finder: function (params, is_index, callback) {}, // callback accepts error and the array/object needed for this resource (and any others that are nested).
-      secure: function (req, callback) {},              // callback accepts error and a boolean for whether or not the user is authorized.
+      finder: function (identifier, is_index, callback) {}, // callback accepts error and the array/object needed for this resource (and any others that are nested).
+      secure: function (req, is_secure_callback) {},              // callback accepts error and a boolean for whether or not the user is authorized.
       before_filters: [ function (req, res, callback) ], // filters that are run before the resource function.
       after_filters: [ function (req, res, callback) ],  // filters that are run after the resource function, and after the response has been sent.
       

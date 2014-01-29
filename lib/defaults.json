@@ -1,12 +1,12 @@
 {
-  'format'         : 'json',
-  'index'          : 'index',
-  'create'         : 'create',
-  'read'           : 'read',
-  'update'         : 'update',
-  'delete          : 'delete',
-  'before_filters' : 'before_filters',
-  'after_filters'  : 'after_filters',
-  'secure'         : 'secure',
-  'finder'         : 'finder'
+  "format"         : "json",
+  "index"          : "index",
+  "create"         : "create",
+  "read"           : "read",
+  "update"         : "update",
+  "delete"         : "delete",
+  "before_filters" : "before_filters",
+  "after_filters"  : "after_filters",
+  "secure"         : "secure",
+  "finder"         : "finder"
 }

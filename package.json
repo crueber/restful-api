@@ -2,7 +2,7 @@
   "name": "restful-api",
   "version": "0.0.1",
   "description": "Build RESTful APIs via Convention.",
-  "main": "lib/index.js",
+  "main": "./lib/api",
   "scripts": {
     "test": ""
   },
