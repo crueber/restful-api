@@ -1,6 +1,10 @@
-# **ß** ALERT ** ALERT ** ALERT ****
+# ** ALERT ** ALERT ** ALERT ****
 
-THIS LIBRARY IS UNDER INITIAL CONSTRUCTION! IT DOES NOT CURRENTLY WORK AND IS NOT CURRENTLY IN NPM!  STAY TUNED!
+THIS LIBRARY IS UNDER INITIAL CONSTRUCTION! IT ONLY PARTIALLY WORKS!!
+
+STAY TUNED IN FOR MORE DETAILS!
+
+Estimated initial "live" date: February 10th, 2014.
 
 # RESTful API
 
@@ -56,9 +60,11 @@ Pull in the library and save it.
 
 First you have to require the restful-api, at some point after your express initialization.
 
-    rest = require('restful-api')(app)
+    var rest = new require('restful-api')(app);
 
 ### Step 3: Register your controllers
+
+This part will become more obvious what you're doing when you look at Step 5 and see what a controller is all about.
 
     rest.register_controller('posts', PostsController)
 
@@ -68,12 +74,16 @@ or...
 
 ### Step 4: Register your resources individually (they can be nested!).
 
+The first parameter in the registering of the controller (Step 3) is the what you use here.
+
     rest.resource('posts')              // <-- Produces /posts pathing!
     rest.resource('posts', 'comments')  // <-- Produces /posts/:post_id/comments pathing! ..hang tight for more info on this.
 
 ### Step 5: Start building your controllers in this fashion!
 
-    module.exports = {
+These are the properties and callbacks that a controller may have on it.
+
+    PostsController = {
       finder: function (identifier, is_index, callback) {}, // callback accepts error and the array/object needed for this resource (and any others that are nested).
       secure: function (req, is_secure_callback) {},              // callback accepts error and a boolean for whether or not the user is authorized.
       before_filters: [ function (req, res, callback) ], // filters that are run before the resource function.
@@ -85,6 +95,14 @@ or...
       update: function (req, res, data) {}, // data is a callback that takes error and a serializable version of the updated resource. Must contain an 'id' property.
       remove: function (req, res, success) {}, // success is a callback that takes error and a boolean to indicate the success of the deletion.
     }
+
+Note that if you omit any of these, it doesn't matter! They're simply not applied to that particular resource. Missing a finder? No biggy, no finding will be done. No security necessary? Omit the secure property. Don't need an index? Don't use it! That simple.
+
+### Step 6: ...
+
+### Step 7: Profit!
+
+...yup, that's it! It's that easy. And now, you'll have an amazingly easy way to build APIs quickly and efficiently.
 
 # Miscellany information that is useful during the initial building phase...
 
