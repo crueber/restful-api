@@ -101,6 +101,7 @@ The last parameter may be used for overriding defaults, just the same way as men
 ### Step 5: Start building your controllers in this fashion!
 
 These are the properties and callbacks that a controller may have on it. All callbacks follow the node convention of callback(err, args...).
+
     PostsController = {
       finder: function (identifier, is_index, callback) {},     // identifier is a string that was passed in the URI.
                                                                 // is_index is a boolean for if this was called from an index or not
