@@ -1,8 +1,10 @@
-# ** ALERT ** ALERT ** ALERT ****
+# Under Initial Construction.
 
-THIS LIBRARY IS UNDER INITIAL CONSTRUCTION! IT ONLY PARTIALLY WORKS!!
+It's getting closer to working, but we're not 100% of the way there yet. 
 
-STAY TUNED IN FOR MORE DETAILS!
+Stay tuned! 
+
+... if you would like to help, feel free to write some unit tests. ;)
 
 Estimated initial "live" date: February 10th, 2014.
 
@@ -40,16 +42,16 @@ The result? Returns an array of response objects, just as if you had made all 9 
 
 ## Why did I do this?
 
-None of the available REST libraries did what I wanted. They either were not easy to use, were incomprehensible, or got REST wrong. My goals for this project are:
+None of the available REST libraries did what I wanted. They were either too obscure, not well documented enough, or just flat out got REST wrong. My goals for this project are:
 
-1. Simple RESTful APIs should be fast to build, and feature rich.
-2. More complicated APIs shouldn't require extra architecting.
-3. RESTful by default. HTTP verbs and nouns, but only for what your app knows. No managing 403s and 405s.
-4. Filters! Finder, secure, and before and after filters.
-5. Represent array/hash data, in any format. JSON and XML provided by default.
-6. Defaults are provided, but are overridable.
-
-Finally, and most importantly: **Single Page Applications (SPAs) need APIs**. This is the way the web is being built today, and it is my primary motivation for making this library. No display-style API will be provided for 'new', 'edit', or 'list', because the intention of this library is specifically to solve a data problem, not a display one. Take a look at Angular, Backbone, or Ember if you're looking for an SPA framework.
+1. Keep it RESTful. No veering. It really isn't that hard, and should make the API easier to use and understand.
+2. Simple RESTful APIs should be fast to build, but also feature rich.
+3. Complicated APIs shouldn't require any extra architecting.
+4. RESTful by default. HTTP verbs and nouns, but only for what your app knows. No managing 403s and 405s.
+5. Filters! Finder, secure, and before and after filters. Applied for every level of nesting. Keep your concerns clean!
+6. Represent array/hash data, in any format. JSON and XML provided by default.
+7. Sane but overridable defaults.
+8. **Single Page Applications (SPAs) need sane, growable APIs**. This is my primary motivation for this library. No display API will be provided for 'new', 'edit', or 'list', because the intention of this library is specifically to solve a data problem, not a display one. Take a look at Angular, Backbone, or Ember if you're looking for an SPA framework.
 
 ### What problems will this library not solve for me?
 
@@ -61,15 +63,13 @@ Finally, and most importantly: **Single Page Applications (SPAs) need APIs**. Th
 
 ### Step 1: Set up restful-api
 
-Pull in the library and save it.
-
     npm install restful-api --save
 
 ### Step 2: Initialize restful-api
 
 First you have to require the restful-api, at some point after your express initialization.
 
-    var rest = new require('restful-api')(app);
+    var rest = new require('restful-api')(app); // where 'app' is your express application.
 
 There is a second parameter available as a default override. Lets say you decided to call your indices 'list' instead of 'index'. You could apply that as default across your app in one fell swoop, like so:
 
