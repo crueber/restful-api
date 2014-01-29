@@ -20,33 +20,42 @@ Here are a quick battery of RESTful APIs for a Blog's Post Resource:
        PUT /posts/1  // Updates a post that exists!
     DELETE /posts/1  // Deletes a post that exists!
 
-It should become fairly obvious why there are so many advantages of this style; Idempotency for one. If you are always operating on a specific, unique identifier (1 in the example above), that means that you're only ever going to effect the identifier '1'! So if you triple and quadruple click the button to delete post 1, you're still only ever going to delete post '1'!
+It should become fairly obvious why there are so many advantages of this style; Convention over configuration. Guessibility. Idempotency. Best of all, it's becoming the primary standard on the web. No assumptions are made (in this framework) about your applications authorization style. Though security is taken in to account for each and every resource. It is recommended that you follow REST guidelines and make it possible for each individual request to require authorization, rather than relying on sessions.
 
 One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
 
     POST /posts?method=delete
-         Body: [1, 2, 3, 4, 5, 10, 42, 68, 99]
+         Body: { delete: [1, 2, 3, 4, 5, 10, 42, 68, 99] }
 
 The result? Returns an array of response objects, just as if you had made all 9 calls individually! Need to make an update call for a whole bunch of posts at a time? Easy peasy:
 
     POST /posts?method=update
-         Body: { 1: { title: 'My new title!' }, 2: { author: 'Christopher Rueber' } }
+         Body: { update: { 1: { title: 'My new title!' }, 2: { author: 'Walter White' } } }
 
-Update in this library means Patch. This is due to the authors belief that you generally don't want to completely smash a whole object if you don't include every attribute. The least bandwidth possible should be consumed.
+#### Limitations and/or Assumptions
 
-#### Limitations
-
-* Express. Most apps in Node utilize Express, and this library is no different. I have some vague notion of expanding this libraries usefulness beyond Express, but for now, that's where it lives.
+* ExpressJS: Most apps in Node utilize Express, and this library is no different. If you have thoughts on how to extend it past express, I'm all ears.
+* HTTP Verbs PUT == PATCH. It is my belief that you don't generally want to smash a whole object, and shouldn't need to include every attribute. Modern devices need to consume less bandwidth to have more responsivity. That's not saying that you couldn't use your update action for both, but this library has chosen not to split them out.
 * That's it! You define your security model, you can use whatever databases you're currently using; You just have to follow some basic patterns in order to get started.
 
 ## Why did I do this?
 
-I saw an awful lot of people taking a shot at this particular problem with different node modules, but not a single one was easy to use or understand. Not only that, but some of them actually got REST wrong! I wanted an easier way to..
+None of the available REST libraries did what I wanted. They either were not easy to use, were incomprehensible, or got REST wrong. My goals for this project are:
 
-1. Simplify writing APIs for Node.
-2. Apply RESTful defaults. I shouldn't have to manage when 403's and 405's happen.
-3. Usable security, filters, and finders should all be baked in.
-4. Easily allow for multiple representations of my resources.
+1. Simple RESTful APIs should be fast to build, and feature rich.
+2. More complicated APIs shouldn't require extra architecting.
+3. RESTful by default. HTTP verbs and nouns, but only for what your app knows. No managing 403s and 405s.
+4. Filters! Finder, secure, and before and after filters.
+5. Represent array/hash data, in any format. JSON and XML provided by default.
+6. Defaults are provided, but are overridable.
+
+Finally, and most importantly: **Single Page Applications (SPAs) need APIs**. This is the way the web is being built today, and it is my primary motivation for making this library. No display-style API will be provided for 'new', 'edit', or 'list', because the intention of this library is specifically to solve a data problem, not a display one. Take a look at Angular, Backbone, or Ember if you're looking for an SPA framework.
+
+### What problems will this library not solve for me?
+
+1. User authentication. Well outside the purview of this library.
+2. The "V" of MVC. Views are another domain that needs solving separately.
+3. Non-conventional API building. If you want to build APIs that don't conform to REST, you're in the wrong place!
 
 ## Getting Started
 
@@ -62,41 +71,56 @@ First you have to require the restful-api, at some point after your express init
 
     var rest = new require('restful-api')(app);
 
+There is a second parameter available as a default override. Lets say you decided to call your indices 'list' instead of 'index'. You could apply that as default across your app in one fell swoop, like so:
+
+    var rest = new require('restful-api')(app, { index: 'list' })
+
+For more info on defaults, take a look at `restful-api/lib/defaults.js`
+
 ### Step 3: Register your controllers
 
 This part will become more obvious what you're doing when you look at Step 5 and see what a controller is all about.
 
     rest.register_controller('posts', PostsController)
 
-or...
+or, if you would prefer to regisgter multiple at once...
 
     rest.register_controller({ 'posts': PostsController, 'comments': CommentsController })
 
 ### Step 4: Register your resources individually (they can be nested!).
 
-The first parameter in the registering of the controller (Step 3) is the what you use here.
+The first parameter in the registering of the controller (Step 3) is the what you use as parameters, here.
 
     rest.resource('posts')              // <-- Produces /posts pathing!
     rest.resource('posts', 'comments')  // <-- Produces /posts/:post_id/comments pathing! ..hang tight for more info on this.
 
+The last parameter may be used for overriding defaults, just the same way as mentioned in Step 2. Ex:
+
+    rest.resource('posts', { read: 'show' }) // uses the 'show' function on the Controller, instead of the 'read' function.
+
 ### Step 5: Start building your controllers in this fashion!
 
-These are the properties and callbacks that a controller may have on it.
-
+These are the properties and callbacks that a controller may have on it. All callbacks follow the node convention of callback(err, args...).
     PostsController = {
-      finder: function (identifier, is_index, callback) {}, // callback accepts error and the array/object needed for this resource (and any others that are nested).
-      secure: function (req, is_secure_callback) {},              // callback accepts error and a boolean for whether or not the user is authorized.
-      before_filters: [ function (req, res, callback) ], // filters that are run before the resource function.
-      after_filters: [ function (req, res, callback) ],  // filters that are run after the resource function, and after the response has been sent.
+      finder: function (identifier, is_index, callback) {},     // identifier is a string that was passed in the URI.
+                                                                // is_index is a boolean for if this was called from an index or not
+                                                                // callback takes err and the model. the model will be set on req[controller_name] for subsequent requests.
+      secure: function (req, is_nested, is_secure_callback) {}, // is_nested indicates whether this controllers action will be called. 
+                                                                // is_secure_callback tkaes err and a boolean to indicate if the request is authorized.
+      before_filters: [ function (req, res, callback) ],        // filters that are run before the resource function. Callback takes err.
+      after_filters: [ function (req, res, callback) ],         // filters that are run after the resource function, and after the response has been sent. Callback takes err.
       
-      index: function (req, res, data) {},  // data is a callback that accepts error and an array of serializable objects. Each object must contain an 'id' property.
-      read: function (req, res, data) {},   // data is a callback that accepts error and a serializable object. Must contain on 'id' property.
-      create: function (req, res, data) {}, // data is a callback that takes error and a serializable version of the created resource. Must contain an 'id' property.
-      update: function (req, res, data) {}, // data is a callback that takes error and a serializable version of the updated resource. Must contain an 'id' property.
-      remove: function (req, res, success) {}, // success is a callback that takes error and a boolean to indicate the success of the deletion.
+      // ** Actions: These are the actually heavy lifters of a resource.
+      index: function (req, res, data) {},     // data is a callback that accepts error and an array of serializable objects. Each object must contain an 'id' property.
+      read: function (req, res, data) {},      // data is a callback that accepts error and a serializable object. Must contain on 'id' property.
+      create: function (req, res, data) {},    // data is a callback that takes error and a serializable version of the created resource. Must contain an 'id' property.
+      update: function (req, res, data) {},    // data is a callback that takes error and a serializable version of the updated resource. Must contain an 'id' property.
+      remove: function (req, res, success) {}, // success is a callback that takes error. If there isn't one, it returns 200 to indicate success.
     }
 
 Note that if you omit any of these, it doesn't matter! They're simply not applied to that particular resource. Missing a finder? No biggy, no finding will be done. No security necessary? Omit the secure property. Don't need an index? Don't use it! That simple.
+
+When you use the batch API, you are running the final resources finder, secure, filters, and action, multiple times, with different identifiers for finder each time.
 
 ### Step 6: ...
 
@@ -104,20 +128,6 @@ Note that if you omit any of these, it doesn't matter! They're simply not applie
 
 ...yup, that's it! It's that easy. And now, you'll have an amazingly easy way to build APIs quickly and efficiently.
 
-# Miscellany information that is useful during the initial building phase...
+## Comments? Concerns?
 
-    // # Index: GET /posts, 
-    // # (C)reate: POST /posts, 
-    // # (R)ead: GET /posts/:id
-    // # (U)pdate: PUT /posts/:id -- at some point, maybe: POST /posts/:id/update
-    // # (D)elete: DELETE /posts -- at some point, maybe: POST /posts/:id/delete
-    // # Bulk: POST /posts/batch?method=delete body: [id, id, id]
-    // # Bulk: POST /posts/batch?method=update body: {id: {}, id: {}}
-
-    // # GET /posts[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}, {}]}
-    // # GET /posts/1[.json] => {posts: [{id: '1', name: 'balh', content: 'lorem ipsum...'}]}
-    // # GET /posts/1/comments[.json] => {comments: [{}, {}]}
-    // # GET /posts/1/comments?parents=true => {posts: [{}], comments: [{}, {}]}
-
-    // CommentController =
-    //   index: (req, res, data) -> # req = {post: PostModel, comment: [CommentModel, CommentModel]}
+There is an issue tracker associated with this library on github. Please feel free to open an issue if you feel that something is incorrect, or come find me on twitter: @crueber.
