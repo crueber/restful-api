@@ -27,12 +27,12 @@ It should become fairly obvious why there are so many advantages of this style; 
 One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
 
     POST /posts/batch
-         Body: { delete: [1, 2, 3, 4, 5, 10, 42, 68, 99] }
+         Body: { 'delete': [1, 2, 3, 4, 5, 10, 42, 68, 99] }
 
 The result? Returns an array of response objects, just as if you had made all 9 calls individually! Need to make an update call for a whole bunch of posts at a time? Easy peasy:
 
     POST /posts/batch
-         Body: { update: { 1: { title: 'My new title!' }, 2: { author: 'Walter White' } } }
+         Body: { 'update': { 1: { title: 'My new title!' }, 2: { author: 'Walter White' } } }
 
 #### Limitations and/or Assumptions
 
