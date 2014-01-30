@@ -29,10 +29,12 @@ One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog 
     POST /posts/batch
          Body: { 'delete': [1, 2, 3, 4, 5, 10, 42, 68, 99] }
 
-The result? Returns an array of response objects, just as if you had made all 9 calls individually! Need to make an update call for a whole bunch of posts at a time? Easy peasy:
+The result? Returns an array of response objects, just as if you had made all 9 calls individually! Need to make an update call for a whole bunch of posts at a time? Create a bunch? Easy peasy:
 
     POST /posts/batch
          Body: { 'update': { 1: { title: 'My new title!' }, 2: { author: 'Walter White' } } }
+    POST /posts/batch
+         Body: { 'create': [{ name: 'New post!', body: 'Some stuff..' }, { name: 'Another...', body: 'This is nifty!'}] }
 
 #### Limitations and/or Assumptions
 
