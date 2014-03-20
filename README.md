@@ -106,20 +106,30 @@ These are the properties and callbacks that a controller may have on it. All cal
 and they all follow the node convention of callback(err, args...).
 
     PostsController = {
-      finder: function (identifier, is_index, callback) {},     // identifier is a string that was passed in the URI.
-                                                                // is_index is a boolean for if this was called from an index or not
-                                                                // callback takes err and the model. the model will be set on req[controller_name] for subsequent requests.
-      secure: function (req, is_nested, is_secure_callback) {}, // is_nested indicates whether this controllers action will be called. 
-                                                                // is_secure_callback takes err and a boolean to indicate if the request is authorized.
-      before_filters: [ function (req, res, callback) ],        // filters that are run before the resource function. Callback takes err.
-      after_filters: [ function (req, res, callback) ],         // filters that are run after the resource function, and after the response has been sent. Callback takes err.
+      // identifier is a string that was passed in the URI.
+      // is_index is a boolean for if this was called from an index or not
+      // callback takes err and the model. the model will be set on req[controller_name] for subsequent requests.
+      finder: function (req, identifier, is_index, callback) {},     
+      // is_nested indicates whether this controllers action will be called. 
+      // is_secure_callback takes err and a boolean to indicate if the request is authorized.
+      secure: function (req, is_nested, is_secure_callback) {}, 
+
+      // filters that are run before the resource function. Callback takes err.
+      before_filters: [ function (req, res, callback) ],
+      // filters that are run after the resource function, and after the response has been sent. Callback takes err.
+      after_filters: [ function (req, res, callback) ],
       
       // ** Actions: These are the actually heavy lifters of a resource.
-      index: function (req, res, data) {},     // data is a callback that accepts error and an array of serializable objects. Each object must contain an 'id' property.
-      read: function (req, res, data) {},      // data is a callback that accepts error and a serializable object. Must contain on 'id' property.
-      create: function (req, res, data) {},    // data is a callback that takes error and a serializable version of the created resource. Must contain an 'id' property.
-      update: function (req, res, data) {},    // data is a callback that takes error and a serializable version of the updated resource. Must contain an 'id' property.
-      remove: function (req, res, success) {}, // success is a callback that takes error. If there isn't one, it returns 200 to indicate success.
+      // data is a callback that accepts error and an array of serializable objects. Each object must contain an 'id' property.
+      index: function (req, res, data) {},
+      // data is a callback that accepts error and a serializable object. Must contain on 'id' property.
+      read: function (req, res, data) {},
+      // data is a callback that takes error and a serializable version of the created resource. Must contain an 'id' property.
+      create: function (req, res, data) {},
+      // data is a callback that takes error and a serializable version of the updated resource. Must contain an 'id' property.
+      update: function (req, res, data) {},
+      // success is a callback that takes error. If there isn't one, it returns 200 to indicate success.
+      remove: function (req, res, success) {}
     }
 
 Note that if you omit any of these, it doesn't matter! They're simply not applied to that particular resource. Missing a finder? No biggy. No security necessary? Omit the secure property. Don't need an index? Don't use it! That simple. Oh, and if you omit an action, a proper 405 will be returned by default.
