@@ -108,7 +108,7 @@ and they all follow the node convention of callback(err, args...).
     PostsController = {
       // identifier is a string that was passed in the URI.
       // is_index is a boolean for if this was called from an index or not
-      // callback takes err and the model. the model will be set on req[controller_name] for subsequent requests.
+      // callback takes err and the model. the model will be set on the request object for subsequent requests (pluralized when index, singularized when not).
       finder: function (req, identifier, is_index, callback) {},     
       // is_nested indicates whether this controllers action will be called. 
       // is_secure_callback takes err and a boolean to indicate if the request is authorized.

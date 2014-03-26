@@ -1,6 +1,6 @@
 {
   "name": "restful-api",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "Build RESTful APIs via Convention.",
   "main": "./lib/api",
   "scripts": {
@@ -10,16 +10,29 @@
     "type": "git",
     "url": "git@github.com:crueber/restful-api.git"
   },
-  "keywords": [ 
-    "node", "rest", "restful", "resource", "representation", 
-    "represent", "route", "router", "routing", "express", "web",
-    "convention-over-configuration", "convention"
+  "keywords": [
+    "node",
+    "rest",
+    "restful",
+    "resource",
+    "representation",
+    "represent",
+    "route",
+    "router",
+    "routing",
+    "express",
+    "web",
+    "convention-over-configuration",
+    "convention"
   ],
   "author": "Christopher WJ Rueber",
   "license": "MIT",
-  "bugs": { "url": "https://github.com/crueber/restful-api/issues" },
+  "bugs": {
+    "url": "https://github.com/crueber/restful-api/issues"
+  },
   "dependencies": {
     "lodash": "~2.4.1",
-    "async": "~0.2.10"
+    "async": "~0.2.10",
+    "inflect": "^0.3.0"
   }
 }
