@@ -100,6 +100,12 @@ The last parameter may be used for overriding defaults, just the same way as men
 
     rest.resource('posts', { read: 'show' }) // uses the 'show' function on the Controller, instead of the 'read' function.
 
+Any name that you registered can be added to the options object, plus '_resource', and given a value that you prefer. For example...
+
+    rest.resource('posts', 'comments', {posts_resource: 'articles', comments_resource: 'blathers'})
+
+Thus setting up your routing to `/articles/:article_id/blathers` instead of `/posts/:post_id/comments`.
+
 ### Step 5: Start building your controllers in this fashion!
 
 These are the properties and callbacks that a controller may have on it. All callbacks are the last arg of the function signature, 
