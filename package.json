@@ -1,7 +1,7 @@
 {
   "name": "restful-api",
   "version": "0.1.1",
-  "description": "Build RESTful APIs via Convention.",
+  "description": "RESTful APIs via Convention.",
   "main": "./lib/api",
   "scripts": {
     "test": ""
