@@ -1,12 +1,10 @@
-# Under Initial Construction.
+# Beta Testing Under Way
 
-It's getting closer to working, but we're not 100% of the way there yet. 
+This package is now in use in a beta application. Expect some evolution still, though it is certainly ready for usage in apps now! 
 
-Stay tuned! 
+### Contributions
 
 ... if you would like to help, feel free to write some unit tests. ;)
-
-Estimated initial "live" date: February 10th, 2014.
 
 # RESTful API
 
