@@ -106,6 +106,14 @@ Any name that you registered can be added to the options object, plus '_resource
 
 Thus setting up your routing to `/articles/:article_id/blathers` instead of `/posts/:post_id/comments`.
 
+You can also add specific actions for your controller!
+
+    // add a GET route for /posts/blather that will be passed to 'blather' in your controller with all filters applied.
+    res.resouce('posts', { list_actions: [{http_verb: 'get', controller_action: 'blather'}] })
+
+    // add a GET route for /posts/:post_id/blather that will be passed to 'blather' in your controller with all filters applied.
+    res.resource('posts', { individual_actions: [{http_verb: 'get', controller_action: 'blather'}] })
+
 ### Step 5: Start building your controllers in this fashion!
 
 These are the properties and callbacks that a controller may have on it. All callbacks are the last arg of the function signature, 
