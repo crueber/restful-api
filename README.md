@@ -10,9 +10,11 @@ This package is now in use in a beta application. Expect some evolution still, t
 
 ## What is this thing?
 
-REST. It's not just a bunch of letters and a vague way to get things done. It stands for REpresentational State Transfer. Luckily, over HTTP, we have an easy place for both the verbs and nouns of REST! Each request issued to a server already contains both things, all you have to do is start structuring it in a conventional pattern. Additionally, the results of these resources should be representable in multiple different formats (JSON and XML at a minimum). 
+REST. It's not just a bunch of letters and a vague way to get things done. It is a way of looking at interfacing with systems using nouns and verbs. Luckily, over HTTP, we have both! All we have to do is start structuring our requests in a grammatically correct way. The result is faster development, easier maintenance and an all around better way to build APIs. 
 
-Here are a quick battery of RESTful APIs for a Blog's Post Resource:
+## How's it work?
+
+Here are a quick battery of RESTful APIs for a Blog "Post" Resource:
 
        GET /posts    // Returns a list of all posts available!
       POST /posts    // Creates a new post!
@@ -20,9 +22,9 @@ Here are a quick battery of RESTful APIs for a Blog's Post Resource:
        PUT /posts/1  // Updates a post that exists!
     DELETE /posts/1  // Deletes a post that exists!
 
-It should become fairly obvious why there are so many advantages of this style; Convention over configuration. Guessibility. Idempotency. Best of all, it's becoming the primary standard on the web. No assumptions are made (in this framework) about your applications authorization style. Though security is taken in to account for each and every resource (even for nested resources, it's applied all the way down the line). It is recommended that you follow REST guidelines and make it possible for each individual request to require authorization, rather than relying purely on sessions.
+It should become fairly obvious why there are so many advantages of this style; Convention over configuration. Powerful simplicity. Best of all, it's more or less become the standard API style over the web. No assumptions are made (in this framework) about your applications general structure. Security is strongly supported in each resource, but you can still structure your app as you like. It is recommended that you follow REST guidelines and make it possible for each individual request to require authorization, rather than relying purely on sessions.
 
-One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too.
+One of the few downfalls of REST is the lack of batch APIs. Continuing the Blog example, want to delete 80 posts? Good luck. Make 80 calls to the API. This library attempts to solve that problem on a larger scale, too. But you shouldn't have to write any extra code. It will look to your code as if 80 separate calls were made (if you use the batch functionality of this library).
 
     POST /posts/batch
          Body: { 'delete': [1, 2, 3, 4, 5, 10, 42, 68, 99] }
@@ -37,19 +39,19 @@ The result? Returns an array of response objects, just as if you had made all 9 
 #### Limitations and/or Assumptions
 
 * ExpressJS: Most apps in Node utilize Express, and this library is no different. If you have thoughts on how to extend it past express, I'm all ears.
-* HTTP Verbs PUT == PATCH. It is my belief that you don't generally want to smash a whole object, and shouldn't need to include every attribute. Modern devices need to consume less bandwidth to have more responsivity. That's not saying that you couldn't use your update action for both, but this library has chosen not to split them out.
+* HTTP PATCH vs PUT. Essentially, a PUT over-writes the object, while a PATCH only over-writes the attributes given. In practice, PUT becomes very rare when you make this distinction. So only PUT is supported, and you can choose to have it act as it normally would, or as a PATCH in your resource. I'll say this though: Modern devices need to consume less bandwidth to be as responsive as possible. I recommend not adding extra fields to your requests if you can help it.
 * That's it! You define your security model, you can use whatever databases you're currently using; You just have to follow some basic patterns in order to get started.
 
 ## Why did I do this?
 
 None of the available REST libraries did what I wanted. They were either too obscure, not well documented enough, or just flat out got REST wrong. My goals for this project are:
 
-1. Keep it RESTful. No veering. It really isn't that hard, and should make the API easier to use and understand.
+1. Keep it RESTful. It isn't that hard, and you'll thank yourself for it after you've done it for a while.
 2. Simple RESTful APIs should be fast to build, but also feature rich.
-3. Complicated APIs shouldn't require any extra architecting.
+3. Complicated APIs shouldn't require extra architecting. They should be able to use the same code as smaller codebases.
 4. RESTful by default. HTTP verbs and nouns, but only for what your app knows. No managing 403s and 405s.
-5. Filters! Finder, secure, and before and after filters. Applied for every level of nesting. Keep your concerns clean!
-6. Represent array/hash data, in any format. JSON and XML provided by default.
+5. Filters!! Finder, secure, and before and after filters. Applied for **every single level of nesting**. Stay DRY and keep your concerns clean!
+6. Represent array/hash data, in any format. JSON provided by default.
 7. Sane but overridable defaults.
 8. **Single Page Applications (SPAs) need sane, growable APIs**. This is my primary motivation for this library. No display API will be provided for 'new', 'edit', or 'list', because the intention of this library is specifically to solve a data problem, not a display one. Take a look at Angular, Backbone, or Ember if you're looking for an SPA framework.
 
