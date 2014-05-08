@@ -1,6 +1,6 @@
 {
   "name": "restful-api",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "RESTful APIs via Convention.",
   "main": "./lib/api",
   "scripts": {
@@ -31,7 +31,7 @@
     "url": "https://github.com/crueber/restful-api/issues"
   },
   "dependencies": {
-    "lodash": "~2.4.1",
+    "lodash": "^2.4.1",
     "async": "~0.2.10",
     "inflect": "^0.3.0"
   }
