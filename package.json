@@ -1,6 +1,6 @@
 {
   "name": "restful-api",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "RESTful APIs via Convention.",
   "main": "./lib/api",
   "scripts": {
