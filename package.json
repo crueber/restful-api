@@ -4,7 +4,7 @@
   "description": "RESTful APIs via Convention.",
   "main": "./lib/api",
   "scripts": {
-    "test": ""
+    "test": "export NODE_ENV=test; node_modules/mocha/bin/mocha -s 2000 -t 3000 -R spec test/*.js"
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,13 @@
     "lodash": "^2.4.1",
     "async": "~0.2.10",
     "inflect": "^0.3.0"
+  },
+  "devDependencies": {
+    "should": "~4.0.4",
+    "mocha": "~1.20.1",
+    "mongoose": "~3.8.12",
+    "express": "~3.5.1",
+    "supertest": "~0.13.0",
+    "debug": "~1.0.2"
   }
 }
