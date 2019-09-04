@@ -1,14 +1,10 @@
-# Beta Testing Under Way
+# Do not use!
 
-This package is now in use in a beta application. Expect some evolution still, though it is certainly ready for usage in apps now! 
+This package is not only unused, it never made it out of alpha stages. Please do not use this module.
 
-### Contributions
+# What was this thing??
 
-... if you would like to help, feel free to write some unit tests. ;)
-
-# RESTful API
-
-## What is this thing?
+### RESTful API
 
 REST. It's not just a bunch of letters and a vague way to get things done. It is a way of looking at interfacing with systems using nouns and verbs. Luckily, over HTTP, we have both! All we have to do is start structuring our requests in a grammatically correct way. The result is faster development, easier maintenance and an all around better way to build APIs. 
 
