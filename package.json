@@ -31,7 +31,7 @@
     "url": "https://github.com/crueber/restful-api/issues"
   },
   "dependencies": {
-    "lodash": "^2.4.1",
+    "lodash": ">=4.17.13",
     "async": "~0.2.10",
     "inflect": "^0.3.0"
   }
